@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alera — Web Design &amp; AI Automation Agency | Kelowna, BC</title>
 <meta name="description" content="Alera builds websites and AI tools for local businesses that want to win. Based in Kelowna, BC.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23080810'/%3E%3Cpath d='M50 8 C53 40 60 47 92 50 C60 53 53 60 50 92 C47 60 40 53 8 50 C40 47 47 40 50 8 Z' fill='%23A78BFA'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -154,7 +155,10 @@
   .nav-cta{padding:10px 24px;font-size:.85rem;}
 
   .mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1100;}
-  .mobile-toggle span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:.3s;}
+  .mobile-toggle span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:transform .3s ease,opacity .3s ease;}
+  .mobile-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .mobile-toggle.open span:nth-child(2){opacity:0;}
+  .mobile-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 
   /* ===== Hero ===== */
   .hero{
@@ -221,7 +225,14 @@
     opacity:0;transform:translateY(20px);
     animation:heroIn .9s cubic-bezier(.16,1,.3,1) 1.95s forwards;
   }
-  @keyframes heroIn{to{opacity:1;transform:translateY(0);}}
+  @keyframes heroIn{
+    0%{opacity:0;}
+    60%{opacity:1;}
+    100%{opacity:1;transform:translateY(0);}
+  }
+  .hero-logo,.hero h1,.hero p,.hero-ctas{
+    animation-timing-function: cubic-bezier(.34,1.56,.64,1);
+  }
 
   .scroll-cue{
     position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
@@ -617,18 +628,20 @@
 (function(){
   const dot = document.getElementById('cursor-dot');
   const ring = document.getElementById('cursor-ring');
-  let mx=0,my=0, rx=0, ry=0;
+  let mx=0,my=0, dx=0, dy=0, rx=0, ry=0;
   window.addEventListener('mousemove', e=>{
     mx=e.clientX; my=e.clientY;
-    dot.style.left=mx+'px'; dot.style.top=my+'px';
   });
-  function animateRing(){
-    rx += (mx-rx)*0.15;
-    ry += (my-ry)*0.15;
+  function animateCursor(){
+    dx += (mx-dx)*0.35;
+    dy += (my-dy)*0.35;
+    dot.style.left=dx+'px'; dot.style.top=dy+'px';
+    rx += (mx-rx)*0.12;
+    ry += (my-ry)*0.12;
     ring.style.left=rx+'px'; ring.style.top=ry+'px';
-    requestAnimationFrame(animateRing);
+    requestAnimationFrame(animateCursor);
   }
-  animateRing();
+  animateCursor();
   document.addEventListener('mousedown',()=>{dot.style.width='16px';dot.style.height='16px';});
   document.addEventListener('mouseup',()=>{dot.style.width='10px';dot.style.height='10px';});
 })();
@@ -644,8 +657,12 @@ const toggle = document.getElementById('mobileToggle');
 const navLinks = document.getElementById('navLinks');
 toggle.addEventListener('click', ()=>{
   navLinks.classList.toggle('open');
+  toggle.classList.toggle('open');
 });
-navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+  navLinks.classList.remove('open');
+  toggle.classList.remove('open');
+}));
 
 /* ===== Hero typing effect ===== */
 (function(){
