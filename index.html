@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alera — Web Design &amp; AI Automation Agency | Kelowna, BC</title>
+<meta name="description" content="Alera builds websites and AI tools for local businesses that want to win. Based in Kelowna, BC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080810;
+    --purple:#7B5CE5;
+    --glow:#A78BFA;
+    --soft:#C4B5FD;
+    --white:#F5F3FF;
+    --muted:#64648A;
+    --surface:#111122;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  ::selection{background:var(--purple);color:var(--white);}
+
+  /* ===== Custom cursor ===== */
+  #cursor-dot{
+    position:fixed;
+    top:0;left:0;
+    width:10px;height:10px;
+    background:var(--glow);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    box-shadow:0 0 10px 2px var(--glow), 0 0 20px 6px rgba(123,92,229,0.5);
+    transform:translate(-50%,-50%);
+    transition:width .2s,height .2s,background .2s;
+  }
+  #cursor-ring{
+    position:fixed;
+    top:0;left:0;
+    width:34px;height:34px;
+    border:1.5px solid rgba(167,139,250,0.5);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9998;
+    transform:translate(-50%,-50%);
+  }
+  @media (hover:none), (pointer:coarse){
+    body{cursor:auto;}
+    #cursor-dot,#cursor-ring{display:none;}
+  }
+
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  section{position:relative;}
+  .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  h1,h2,h3{font-family:'Orbitron',sans-serif;}
+
+  .reveal{
+    opacity:0;
+    transform:translateY(48px);
+    transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  /* ===== Alera Logo (CSS/SVG star) ===== */
+  .alera-logo{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .alera-star{
+    width:26px;height:26px;
+    position:relative;
+    display:inline-block;
+    animation:starPulse 3.2s ease-in-out infinite;
+  }
+  .alera-star svg{width:100%;height:100%;display:block;}
+  @keyframes starPulse{
+    0%,100%{filter:drop-shadow(0 0 6px var(--purple)) drop-shadow(0 0 2px var(--glow));}
+    50%{filter:drop-shadow(0 0 18px var(--glow)) drop-shadow(0 0 8px var(--purple));}
+  }
+  .alera-word{
+    font-family:'Orbitron',sans-serif;
+    font-weight:700;
+    letter-spacing:.45em;
+    font-size:.78rem;
+    color:var(--white);
+    text-shadow:0 0 12px rgba(167,139,250,.5);
+  }
+  .nav-logo{flex-direction:row;align-items:center;gap:10px;}
+  .nav-logo .alera-star{width:22px;height:22px;}
+  .nav-logo .alera-word{font-size:.95rem;letter-spacing:.32em;}
+
+  /* ===== Navbar ===== */
+  header{
+    position:fixed;top:0;left:0;width:100%;
+    z-index:1000;
+    padding:18px 0;
+    transition:background .4s ease, backdrop-filter .4s ease, border-color .4s ease, padding .3s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(8,8,16,0.55);
+    backdrop-filter:blur(16px) saturate(160%);
+    -webkit-backdrop-filter:blur(16px) saturate(160%);
+    border-bottom:1px solid rgba(123,92,229,0.18);
+    padding:12px 0;
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;}
+  .nav-links{display:flex;align-items:center;gap:36px;}
+  .nav-links a{
+    font-size:.92rem;font-weight:500;color:var(--white);
+    position:relative;opacity:.85;transition:opacity .25s,color .25s;
+  }
+  .nav-links a:hover{opacity:1;color:var(--soft);}
+  .nav-links a:not(.btn)::after{
+    content:'';position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--glow);
+    transition:width .25s ease;
+  }
+  .nav-links a:not(.btn):hover::after{width:100%;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:13px 30px;border-radius:999px;
+    font-weight:600;font-size:.92rem;
+    cursor:pointer;border:none;
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease, background .3s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--purple),#9171f0);
+    color:#fff;
+    box-shadow:0 0 16px rgba(123,92,229,.55), 0 0 0 1px rgba(167,139,250,.25) inset;
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px) scale(1.045);
+    box-shadow:0 0 32px rgba(167,139,250,.85), 0 0 0 1px rgba(167,139,250,.4) inset;
+  }
+  .btn-ghost{
+    background:transparent;color:var(--white);
+    border:1px solid rgba(245,243,255,.25);
+  }
+  .btn-ghost:hover{
+    transform:translateY(-2px) scale(1.04);
+    border-color:var(--glow);
+    box-shadow:0 0 22px rgba(167,139,250,.35);
+    background:rgba(167,139,250,.06);
+  }
+  .nav-cta{padding:10px 24px;font-size:.85rem;}
+
+  .mobile-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1100;}
+  .mobile-toggle span{width:24px;height:2px;background:var(--white);border-radius:2px;transition:.3s;}
+
+  /* ===== Hero ===== */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+    padding-top:90px;
+    text-align:center;
+  }
+  .hero-glow{
+    position:absolute;
+    width:900px;height:900px;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(123,92,229,0.45) 0%, rgba(123,92,229,0.18) 35%, rgba(8,8,16,0) 70%);
+    filter:blur(40px);
+    animation:breathe 7s ease-in-out infinite;
+    z-index:0;
+    pointer-events:none;
+  }
+  @keyframes breathe{
+    0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.85;}
+    50%{transform:translate(-50%,-50%) scale(1.18);opacity:1;}
+  }
+  #particles{position:absolute;inset:0;z-index:0;pointer-events:none;}
+  .particle{
+    position:absolute;
+    background:var(--soft);
+    border-radius:50%;
+    opacity:.5;
+    box-shadow:0 0 6px var(--glow);
+    animation:drift linear infinite;
+  }
+  @keyframes drift{
+    0%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-30px) translateX(15px);}
+    100%{transform:translateY(0) translateX(0);}
+  }
+  .hero-content{position:relative;z-index:2;max-width:880px;padding:0 24px;}
+  .hero-logo{margin-bottom:34px;opacity:0;transform:translateY(30px);animation:heroIn .9s cubic-bezier(.16,1,.3,1) .15s forwards;}
+  .hero h1{
+    font-size:clamp(2.4rem,6.4vw,4.6rem);
+    font-weight:900;
+    line-height:1.08;
+    color:var(--white);
+    text-shadow:0 0 30px rgba(123,92,229,.35);
+    opacity:0;transform:translateY(30px);
+    animation:heroIn .9s cubic-bezier(.16,1,.3,1) .4s forwards;
+    min-height:1.2em;
+  }
+  .cursor-blink{display:inline-block;width:3px;background:var(--glow);margin-left:6px;animation:blink 1s steps(1) infinite;box-shadow:0 0 8px var(--glow);}
+  @keyframes blink{50%{opacity:0;}}
+  .hero p{
+    margin-top:24px;
+    font-size:1.15rem;
+    color:var(--soft);
+    font-weight:400;
+    opacity:0;transform:translateY(20px);
+    animation:heroIn .9s cubic-bezier(.16,1,.3,1) 1.6s forwards;
+  }
+  .hero-ctas{
+    margin-top:42px;
+    display:flex;gap:18px;justify-content:center;flex-wrap:wrap;
+    opacity:0;transform:translateY(20px);
+    animation:heroIn .9s cubic-bezier(.16,1,.3,1) 1.95s forwards;
+  }
+  @keyframes heroIn{to{opacity:1;transform:translateY(0);}}
+
+  .scroll-cue{
+    position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    color:var(--muted);font-size:.72rem;letter-spacing:.2em;z-index:2;
+    opacity:0;animation:heroIn .9s ease 2.3s forwards;
+  }
+  .scroll-cue .line{width:1px;height:30px;background:linear-gradient(var(--glow),transparent);animation:scrollLine 1.8s ease-in-out infinite;}
+  @keyframes scrollLine{0%{transform:scaleY(0);opacity:0;}50%{transform:scaleY(1);opacity:1;}100%{transform:scaleY(0);opacity:0;}}
+
+  /* ===== Section heading shared ===== */
+  .section-tag{
+    display:inline-block;color:var(--glow);font-size:.78rem;letter-spacing:.25em;
+    font-weight:600;text-transform:uppercase;margin-bottom:14px;
+  }
+  .section-head{text-align:center;max-width:640px;margin:0 auto 64px;}
+  .section-head h2{font-size:clamp(1.9rem,4vw,2.7rem);color:var(--white);margin-bottom:14px;}
+  .section-head p{color:var(--muted);font-size:1.02rem;line-height:1.6;}
+
+  section.pad{padding:140px 0;}
+
+  /* ===== Services ===== */
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .service-card{
+    background:var(--surface);
+    border:1px solid rgba(123,92,229,0.12);
+    border-radius:20px;
+    padding:42px 32px;
+    transition:border-color .35s ease, box-shadow .35s ease;
+    transform-style:preserve-3d;
+    will-change:transform;
+    position:relative;
+    overflow:hidden;
+  }
+  .service-card::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 0%, rgba(123,92,229,0.12), transparent 60%);
+    opacity:0;transition:opacity .4s ease;pointer-events:none;
+  }
+  .service-card:hover{
+    border-color:rgba(167,139,250,0.6);
+    box-shadow:0 0 40px rgba(123,92,229,.28);
+  }
+  .service-card:hover::before{opacity:1;}
+  .service-icon{
+    width:56px;height:56px;border-radius:14px;
+    background:linear-gradient(135deg,rgba(123,92,229,.25),rgba(167,139,250,.08));
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:26px;border:1px solid rgba(167,139,250,.3);
+  }
+  .service-icon svg{width:26px;height:26px;stroke:var(--soft);}
+  .service-card h3{font-size:1.2rem;color:var(--white);margin-bottom:12px;letter-spacing:.01em;}
+  .service-card p{color:var(--muted);font-size:.94rem;line-height:1.65;}
+
+  /* ===== Stats ===== */
+  .stats-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border-top:1px solid rgba(123,92,229,.15);
+    border-bottom:1px solid rgba(123,92,229,.15);
+  }
+  .stat{
+    text-align:center;padding:64px 24px;
+    border-right:1px solid rgba(123,92,229,.15);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{
+    font-family:'Orbitron',sans-serif;font-weight:800;
+    font-size:clamp(2.2rem,5vw,3.4rem);
+    color:var(--white);
+    text-shadow:0 0 24px rgba(167,139,250,.45);
+  }
+  .stat .label{margin-top:10px;color:var(--muted);font-size:.88rem;letter-spacing:.06em;text-transform:uppercase;}
+
+  /* ===== Testimonials marquee ===== */
+  .marquee-wrap{overflow:hidden;position:relative;padding:140px 0;}
+  .marquee-wrap::before,.marquee-wrap::after{
+    content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;
+  }
+  .marquee-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent);}
+  .marquee-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent);}
+  .marquee-track{
+    display:flex;gap:24px;width:max-content;
+    animation:marquee 38s linear infinite;
+  }
+  @keyframes marquee{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  .t-card{
+    width:340px;flex-shrink:0;
+    background:var(--surface);
+    border-left:3px solid var(--purple);
+    border-radius:14px;
+    padding:28px 26px;
+    box-shadow:0 0 24px rgba(0,0,0,.25);
+  }
+  .t-card p.quote{color:var(--white);font-size:.95rem;line-height:1.65;margin-bottom:18px;}
+  .t-card .who{font-size:.82rem;color:var(--glow);font-weight:600;}
+  .t-card .biz{font-size:.78rem;color:var(--muted);}
+
+  /* ===== Quote form ===== */
+  .quote-section{position:relative;}
+  .form-wrap{
+    max-width:640px;margin:0 auto;
+    background:var(--surface);
+    border:1px solid rgba(123,92,229,.18);
+    border-radius:24px;
+    padding:52px 48px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 0 60px rgba(123,92,229,.08);
+  }
+  form{display:grid;gap:20px;transition:opacity .4s ease, transform .4s ease;}
+  form.hidden-form{opacity:0;transform:scale(.96);pointer-events:none;position:absolute;inset:0;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  label{font-size:.82rem;color:var(--soft);letter-spacing:.03em;}
+  input,select{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(123,92,229,.25);
+    border-radius:10px;
+    padding:14px 16px;
+    color:var(--white);
+    font-family:'Inter',sans-serif;
+    font-size:.95rem;
+    transition:border-color .25s,box-shadow .25s;
+  }
+  input::placeholder{color:var(--muted);}
+  input:focus,select:focus{
+    outline:none;border-color:var(--glow);
+    box-shadow:0 0 0 3px rgba(167,139,250,.15);
+  }
+  select{appearance:none;cursor:pointer;}
+  .submit-btn{margin-top:8px;width:100%;padding:16px;font-size:1rem;}
+
+  .success-state{
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    padding:30px 0;gap:18px;opacity:0;transform:scale(.9);
+    transition:opacity .5s ease, transform .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  .success-state.show{opacity:1;transform:scale(1);}
+  .check-wrap{position:relative;width:88px;height:88px;display:flex;align-items:center;justify-content:center;}
+  .ripple{
+    position:absolute;inset:0;border-radius:50%;
+    border:2px solid var(--glow);
+    opacity:0;
+  }
+  .success-state.show .ripple{animation:ripple 1s ease-out .15s;}
+  @keyframes ripple{
+    0%{opacity:.9;transform:scale(.4);}
+    100%{opacity:0;transform:scale(2.6);}
+  }
+  .check-circle{
+    width:78px;height:78px;border-radius:50%;
+    background:radial-gradient(circle, rgba(123,92,229,.35), rgba(123,92,229,.05));
+    border:1.5px solid var(--glow);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 30px rgba(167,139,250,.5);
+  }
+  .check-circle svg{width:36px;height:36px;}
+  .check-circle path{
+    stroke:var(--glow);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:40;stroke-dashoffset:40;
+  }
+  .success-state.show .check-circle path{animation:drawCheck .5s ease .5s forwards;}
+  @keyframes drawCheck{to{stroke-dashoffset:0;}}
+  .success-state h3{font-size:1.3rem;color:var(--white);}
+  .success-state p{color:var(--muted);font-size:.92rem;max-width:320px;}
+
+  /* ===== Footer ===== */
+  footer{padding:80px 0 40px;text-align:center;border-top:1px solid rgba(123,92,229,.12);}
+  .footer-contact{
+    display:flex;gap:28px;justify-content:center;flex-wrap:wrap;
+    margin:30px 0 26px;color:var(--soft);font-size:.92rem;
+  }
+  .footer-contact a{transition:color .25s;}
+  .footer-contact a:hover{color:var(--glow);}
+  footer .copyright{color:var(--muted);font-size:.8rem;margin-top:18px;}
+
+  /* ===== Responsive ===== */
+  @media(max-width:900px){
+    .services-grid{grid-template-columns:1fr;}
+    .stats-strip{grid-template-columns:1fr;}
+    .stat{border-right:none;border-bottom:1px solid rgba(123,92,229,.15);}
+    .stat:last-child{border-bottom:none;}
+    .form-wrap{padding:38px 26px;}
+  }
+  @media(max-width:760px){
+    .nav-links{
+      position:fixed;top:0;right:0;height:100vh;width:72%;max-width:320px;
+      background:rgba(8,8,16,0.97);
+      backdrop-filter:blur(20px);
+      flex-direction:column;justify-content:center;gap:32px;
+      transform:translateX(100%);
+      transition:transform .4s cubic-bezier(.16,1,.3,1);
+      border-left:1px solid rgba(123,92,229,.2);
+    }
+    .nav-links.open{transform:translateX(0);}
+    .mobile-toggle{display:flex;}
+    .nav-cta{display:none;}
+    .nav-links .nav-cta-mobile{display:inline-flex;}
+  }
+  @media(min-width:761px){
+    .nav-cta-mobile{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<header id="site-header">
+  <div class="container">
+    <nav>
+      <a href="#" class="alera-logo nav-logo" aria-label="Alera home">
+        <span class="alera-star">
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M50 2 C53 38 62 47 98 50 C62 53 53 62 50 98 C47 62 38 53 2 50 C38 47 47 38 50 2 Z" fill="#A78BFA"/>
+          </svg>
+        </span>
+        <span class="alera-word">A L E R A</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="btn btn-primary nav-cta">Get a Quote</a>
+        <a href="#contact" class="btn btn-primary nav-cta-mobile">Get a Quote</a>
+      </div>
+      <div class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-logo alera-logo">
+      <span class="alera-star" style="width:34px;height:34px;">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M50 2 C53 38 62 47 98 50 C62 53 53 62 50 98 C47 62 38 53 2 50 C38 47 47 38 50 2 Z" fill="#A78BFA"/>
+        </svg>
+      </span>
+      <span class="alera-word" style="font-size:.95rem;">A L E R A</span>
+    </div>
+    <h1 id="typedHeadline">&nbsp;</h1>
+    <p>Websites and AI tools built for local businesses that want to win.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-primary">Get a Free Quote</a>
+      <a href="#services" class="btn btn-ghost">See Our Work</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
+</section>
+
+<section class="pad" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">What We Do</span>
+      <h2>Services built to grow your business</h2>
+      <p>From your website to your phone line — we build the systems that bring customers in.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18"/><circle cx="6" cy="6" r=".6" fill="#C4B5FD"/></svg></div>
+        <h3>Website Builds</h3>
+        <p>Fast, beautiful, conversion-focused websites designed to make your business look like the obvious choice.</p>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.1s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 2a4 4 0 0 1 4 4v3a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4Z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/></svg></div>
+        <h3>AI Receptionist Setup</h3>
+        <p>Never miss a call again. AI answers, books, and follows up — 24/7 — so you can focus on the job.</p>
+      </div>
+      <div class="service-card reveal" style="transition-delay:.2s">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <h3>Local Business SEO</h3>
+        <p>Show up first when nearby customers search. We optimize your presence so Google sends them to you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="about">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Why Alera</span>
+      <h2>Built different. Built local.</h2>
+    </div>
+  </div>
+  <div class="stats-strip">
+    <div class="stat reveal">
+      <div class="num" data-target="48" data-suffix="hr">0hr</div>
+      <div class="label">Turnaround</div>
+    </div>
+    <div class="stat reveal" style="transition-delay:.1s">
+      <div class="num" data-target="100" data-suffix="%">0%</div>
+      <div class="label">Local Focus</div>
+    </div>
+    <div class="stat reveal" style="transition-delay:.2s">
+      <div class="num" data-target="0" data-text="AI-Powered">0</div>
+      <div class="label">Results</div>
+    </div>
+  </div>
+</section>
+
+<section class="marquee-wrap">
+  <div class="container">
+    <div class="section-head reveal" style="margin-bottom:48px;">
+      <span class="section-tag">Trusted Locally</span>
+      <h2>What Kelowna businesses are saying</h2>
+    </div>
+  </div>
+  <div class="marquee-track" id="marqueeTrack">
+    <!-- duplicated via JS -->
+  </div>
+</section>
+
+<section class="pad quote-section" id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-tag">Get Started</span>
+      <h2>Let's Build Something</h2>
+      <p>Tell us a bit about your business and we'll be in touch within 24 hours.</p>
+    </div>
+    <div class="form-wrap reveal">
+      <form id="quoteForm">
+        <div class="field">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Jordan Smith" required>
+        </div>
+        <div class="field">
+          <label for="bizName">Business Name</label>
+          <input type="text" id="bizName" name="bizName" placeholder="Smith HVAC Co." required>
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" placeholder="(250) 555-0123" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@business.com" required>
+        </div>
+        <div class="field">
+          <label for="need">What do you need?</label>
+          <select id="need" name="need" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Website">Website</option>
+            <option value="AI Receptionist">AI Receptionist</option>
+            <option value="Both">Both</option>
+            <option value="Not Sure">Not Sure</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary submit-btn">Send My Request</button>
+      </form>
+      <div class="success-state" id="successState">
+        <div class="check-wrap">
+          <div class="ripple"></div>
+          <div class="check-circle">
+            <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+          </div>
+        </div>
+        <h3>Got it!</h3>
+        <p>We'll reach out within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a href="#" class="alera-logo" style="margin:0 auto;">
+      <span class="alera-star">
+        <svg viewBox="0 0 100 100" fill="none">
+          <path d="M50 2 C53 38 62 47 98 50 C62 53 53 62 50 98 C47 62 38 53 2 50 C38 47 47 38 50 2 Z" fill="#A78BFA"/>
+        </svg>
+      </span>
+      <span class="alera-word">A L E R A</span>
+    </a>
+    <div class="footer-contact">
+      <a href="tel:2364576087">236-457-6087</a>
+      <a href="mailto:aimantyagi2010@gmail.com">aimantyagi2010@gmail.com</a>
+      <a href="https://instagram.com/aleradesign" target="_blank" rel="noopener">@aleradesign</a>
+    </div>
+    <div class="copyright">&copy; 2025 Alera. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+/* ===== Custom cursor with trailing lag ===== */
+(function(){
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx=0,my=0, rx=0, ry=0;
+  window.addEventListener('mousemove', e=>{
+    mx=e.clientX; my=e.clientY;
+    dot.style.left=mx+'px'; dot.style.top=my+'px';
+  });
+  function animateRing(){
+    rx += (mx-rx)*0.15;
+    ry += (my-ry)*0.15;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.addEventListener('mousedown',()=>{dot.style.width='16px';dot.style.height='16px';});
+  document.addEventListener('mouseup',()=>{dot.style.width='10px';dot.style.height='10px';});
+})();
+
+/* ===== Navbar scroll morph ===== */
+const header = document.getElementById('site-header');
+window.addEventListener('scroll', ()=>{
+  header.classList.toggle('scrolled', window.scrollY > 30);
+});
+
+/* ===== Mobile nav toggle ===== */
+const toggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+toggle.addEventListener('click', ()=>{
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+
+/* ===== Hero typing effect ===== */
+(function(){
+  const el = document.getElementById('typedHeadline');
+  const text = "Your Business. Upgraded.";
+  let i = 0;
+  el.innerHTML = '';
+  const cursorSpan = document.createElement('span');
+  cursorSpan.className = 'cursor-blink';
+  cursorSpan.innerHTML = '&nbsp;';
+
+  function type(){
+    if(i <= text.length){
+      el.textContent = text.slice(0,i);
+      el.appendChild(cursorSpan);
+      i++;
+      setTimeout(type, 45);
+    } else {
+      setTimeout(()=>cursorSpan.remove(), 1200);
+    }
+  }
+  setTimeout(type, 550);
+})();
+
+/* ===== Floating particles ===== */
+(function(){
+  const wrap = document.getElementById('particles');
+  const count = window.innerWidth < 700 ? 24 : 50;
+  for(let i=0;i<count;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random()*3+1;
+    p.style.width = size+'px';
+    p.style.height = size+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.top = Math.random()*100+'%';
+    p.style.animationDuration = (Math.random()*8+6)+'s';
+    p.style.animationDelay = (Math.random()*5)+'s';
+    p.style.opacity = Math.random()*0.5+0.2;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ===== IntersectionObserver reveals ===== */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      io.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.15});
+revealEls.forEach(el=>io.observe(el));
+
+/* ===== 3D tilt on service cards ===== */
+document.querySelectorAll('.service-card').forEach(card=>{
+  card.addEventListener('mousemove', e=>{
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rotateX = ((y / rect.height) - 0.5) * -12;
+    const rotateY = ((x / rect.width) - 0.5) * 12;
+    card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+  });
+  card.addEventListener('mouseleave', ()=>{
+    card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+  });
+});
+
+/* ===== Stat count-up ===== */
+const stats = document.querySelectorAll('.stat .num');
+const statIO = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const el = entry.target;
+      const target = parseInt(el.dataset.target,10);
+      const suffix = el.dataset.suffix || '';
+      const customText = el.dataset.text;
+      if(customText){
+        let i=0;
+        const t = setInterval(()=>{
+          el.textContent = customText.slice(0,i)+(i<customText.length?'|':'');
+          i++;
+          if(i>customText.length){clearInterval(t); el.textContent=customText;}
+        },40);
+      } else {
+        let cur = 0;
+        const duration = 1400;
+        const start = performance.now();
+        function step(now){
+          const progress = Math.min((now-start)/duration, 1);
+          cur = Math.floor(progress*target);
+          el.textContent = cur + suffix;
+          if(progress < 1) requestAnimationFrame(step);
+          else el.textContent = target + suffix;
+        }
+        requestAnimationFrame(step);
+      }
+      statIO.unobserve(el);
+    }
+  });
+}, {threshold:0.5});
+stats.forEach(el=>statIO.observe(el));
+
+/* ===== Testimonials marquee content ===== */
+(function(){
+  const quotes = [
+    {q:"Alera redid our site in under 48 hours and we got 3 new HVAC calls the same week it launched.", who:"Dave Reinholt", biz:"Reinholt Heating & Cooling"},
+    {q:"The AI receptionist actually books appointments while we're with patients. Our front desk finally has breathing room.", who:"Dr. Priya Anand", biz:"Anand Family Dental"},
+    {q:"We've been in Kelowna 20 years and never ranked on Google until Alera fixed our local SEO.", who:"Mike Costa", biz:"Costa's Auto Repair"},
+    {q:"Professional, fast, and they actually understood what a small shop needs — not a bloated corporate site.", who:"Sarah Lindqvist", biz:"Lindqvist Landscaping"},
+    {q:"Our booking calls doubled the month after launch. Worth every penny.", who:"Tom Becker", biz:"Becker Plumbing & Drain"},
+    {q:"The AI phone system sounds so natural our customers don't even realize it's automated.", who:"Angela Ruiz", biz:"Ruiz Family Orthodontics"}
+  ];
+  const track = document.getElementById('marqueeTrack');
+  function buildCard(t){
+    const div = document.createElement('div');
+    div.className = 't-card';
+    div.innerHTML = `<p class="quote">&ldquo;${t.q}&rdquo;</p><div class="who">${t.who}</div><div class="biz">${t.biz}</div>`;
+    return div;
+  }
+  // duplicate set twice for seamless loop
+  [...quotes, ...quotes].forEach(t=>track.appendChild(buildCard(t)));
+})();
+
+/* ===== Quote form submission ===== */
+const form = document.getElementById('quoteForm');
+const successState = document.getElementById('successState');
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  const fullName = document.getElementById('fullName').value;
+  const bizName = document.getElementById('bizName').value;
+  const phone = document.getElementById('phone').value;
+  const email = document.getElementById('email').value;
+  const need = document.getElementById('need').value;
+
+  const subject = encodeURIComponent('New Quote Request - ' + bizName);
+  const body = encodeURIComponent(
+    `Name: ${fullName}\nBusiness: ${bizName}\nPhone: ${phone}\nEmail: ${email}\nNeeds: ${need}`
+  );
+  const mailto = `mailto:aimantyagi2010@gmail.com?subject=${subject}&body=${body}`;
+
+  form.classList.add('hidden-form');
+  setTimeout(()=>{
+    successState.classList.add('show');
+  }, 250);
+
+  window.location.href = mailto;
+});
+</script>
+</body>
+</html>
