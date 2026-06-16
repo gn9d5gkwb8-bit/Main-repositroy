@@ -571,9 +571,9 @@
     </div>
     <div class="form-wrap reveal">
       <form id="quoteForm">
-        <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
-        <input type="hidden" name="subject" value="New Quote Request from Alera Website">
-        <input type="hidden" name="from_name" value="Alera Website">
+        <input type="hidden" name="_subject" value="New Quote Request from Alera Website">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
         <div class="field">
           <label for="fullName">Full Name</label>
           <input type="text" id="fullName" name="fullName" placeholder="Jordan Smith" required>
@@ -819,19 +819,18 @@ form.addEventListener('submit', async function(e){
   const formData = new FormData(form);
 
   try{
-    const res = await fetch('https://api.web3forms.com/submit', {
+    const res = await fetch('https://formsubmit.co/ajax/aimantyagi2010@gmail.com', {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
       body: formData
     });
     const result = await res.json();
-
-    if(result.success){
-      form.classList.add('hidden-form');
-      setTimeout(()=>{ successState.classList.add('show'); }, 250);
-    } else {
+    if(!res.ok || result.success === 'false' || result.success === false){
       throw new Error(result.message || 'Submission failed');
     }
+
+    form.classList.add('hidden-form');
+    setTimeout(()=>{ successState.classList.add('show'); }, 250);
   } catch(err){
     const fullName = document.getElementById('fullName').value;
     const bizName = document.getElementById('bizName').value;
