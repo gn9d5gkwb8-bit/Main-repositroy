@@ -401,6 +401,15 @@
   .success-state h3{font-size:1.3rem;color:var(--white);}
   .success-state p{color:var(--muted);font-size:.92rem;max-width:320px;}
 
+  .error-state{
+    display:none;text-align:center;padding:20px 0;
+    color:#f5a3a3;font-size:.92rem;
+  }
+  .error-state.show{display:block;}
+  .error-state a{color:var(--glow);text-decoration:underline;}
+
+  .submit-btn[disabled]{opacity:.6;cursor:not-allowed;}
+
   /* ===== Footer ===== */
   footer{padding:80px 0 40px;text-align:center;border-top:1px solid rgba(123,92,229,.12);}
   .footer-contact{
@@ -562,6 +571,9 @@
     </div>
     <div class="form-wrap reveal">
       <form id="quoteForm">
+        <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
+        <input type="hidden" name="subject" value="New Quote Request from Alera Website">
+        <input type="hidden" name="from_name" value="Alera Website">
         <div class="field">
           <label for="fullName">Full Name</label>
           <input type="text" id="fullName" name="fullName" placeholder="Jordan Smith" required>
@@ -599,6 +611,9 @@
         </div>
         <h3>Got it!</h3>
         <p>We'll reach out within 24 hours.</p>
+      </div>
+      <div class="error-state" id="errorState">
+        <p>Something went wrong sending your request. Please email us directly at <a href="mailto:aimantyagi2010@gmail.com">aimantyagi2010@gmail.com</a>.</p>
       </div>
     </div>
   </div>
@@ -792,26 +807,47 @@ stats.forEach(el=>statIO.observe(el));
 /* ===== Quote form submission ===== */
 const form = document.getElementById('quoteForm');
 const successState = document.getElementById('successState');
-form.addEventListener('submit', function(e){
+const errorState = document.getElementById('errorState');
+const submitBtn = form.querySelector('.submit-btn');
+
+form.addEventListener('submit', async function(e){
   e.preventDefault();
-  const fullName = document.getElementById('fullName').value;
-  const bizName = document.getElementById('bizName').value;
-  const phone = document.getElementById('phone').value;
-  const email = document.getElementById('email').value;
-  const need = document.getElementById('need').value;
+  errorState.classList.remove('show');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
 
-  const subject = encodeURIComponent('New Quote Request - ' + bizName);
-  const body = encodeURIComponent(
-    `Name: ${fullName}\nBusiness: ${bizName}\nPhone: ${phone}\nEmail: ${email}\nNeeds: ${need}`
-  );
-  const mailto = `mailto:aimantyagi2010@gmail.com?subject=${subject}&body=${body}`;
+  const formData = new FormData(form);
 
-  form.classList.add('hidden-form');
-  setTimeout(()=>{
-    successState.classList.add('show');
-  }, 250);
+  try{
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: formData
+    });
+    const result = await res.json();
 
-  window.location.href = mailto;
+    if(result.success){
+      form.classList.add('hidden-form');
+      setTimeout(()=>{ successState.classList.add('show'); }, 250);
+    } else {
+      throw new Error(result.message || 'Submission failed');
+    }
+  } catch(err){
+    const fullName = document.getElementById('fullName').value;
+    const bizName = document.getElementById('bizName').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const need = document.getElementById('need').value;
+    const subject = encodeURIComponent('New Quote Request - ' + bizName);
+    const body = encodeURIComponent(
+      `Name: ${fullName}\nBusiness: ${bizName}\nPhone: ${phone}\nEmail: ${email}\nNeeds: ${need}`
+    );
+    errorState.classList.add('show');
+    window.location.href = `mailto:aimantyagi2010@gmail.com?subject=${subject}&body=${body}`;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send My Request';
+  }
 });
 </script>
 </body>
