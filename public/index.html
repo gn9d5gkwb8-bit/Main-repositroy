@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kings Club — Late nights, live rooms, members' privileges</title>
+    <meta
+      name="description"
+      content="Kings Club: a late-night venue and members' club. Weekly programme, table reservations, and membership."
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>♛</text></svg>"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#programme">Skip to the programme</a>
+
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary">
+        <a class="wordmark" href="#top">
+          <span class="wordmark__crown" aria-hidden="true">♛</span>
+          <span class="wordmark__text">Kings<span>Club</span></span>
+        </a>
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+          <span class="nav__toggle-bar" aria-hidden="true"></span>
+          <span class="sr-only">Menu</span>
+        </button>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#programme">Programme</a></li>
+          <li><a href="#rooms">Rooms</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#visit">Visit</a></li>
+          <li><a class="button button--small" href="#reserve">Reserve a table</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero__glow" aria-hidden="true"></div>
+        <div class="hero__inner">
+          <p class="eyebrow">Est. 1974 · Open Thu–Sun</p>
+          <h1 class="hero__title">The night belongs<br />to those who <em>stay</em>.</h1>
+          <p class="hero__lede">
+            Three rooms, one address. A main floor that runs until the lights come up, a live
+            parlour with a real piano, and a members' gallery upstairs where the door stays quiet.
+          </p>
+          <div class="hero__actions">
+            <a class="button" href="#reserve">Reserve a table</a>
+            <a class="button button--ghost" href="#programme">See what's on</a>
+          </div>
+          <dl class="hero__stats">
+            <div>
+              <dt>Capacity</dt>
+              <dd>480</dd>
+            </div>
+            <div>
+              <dt>Rooms</dt>
+              <dd>3</dd>
+            </div>
+            <div>
+              <dt>Last call</dt>
+              <dd>4am</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="section" id="programme">
+        <div class="section__head">
+          <h2>What's on</h2>
+          <p>The next few weeks at the club. Doors listed are local time.</p>
+        </div>
+
+        <div class="filters" role="group" aria-label="Filter the programme">
+          <button class="chip is-active" type="button" data-category="all">Everything</button>
+          <button class="chip" type="button" data-category="club-night">Club nights</button>
+          <button class="chip" type="button" data-category="live">Live</button>
+          <button class="chip" type="button" data-category="members">Members only</button>
+        </div>
+
+        <div id="events-status" class="events__status" role="status">Loading the programme…</div>
+        <ul class="events" id="events"></ul>
+      </section>
+
+      <section class="section rooms" id="rooms">
+        <div class="section__head">
+          <h2>The rooms</h2>
+          <p>Each one has its own door policy, its own sound, its own hours.</p>
+        </div>
+        <div class="rooms__grid">
+          <article class="room room--main">
+            <div class="room__art" aria-hidden="true"></div>
+            <h3>Main Room</h3>
+            <p>
+              Funktion-One rig, a floor that holds 300, and residents who know how to hold it until
+              four. Thursday through Sunday.
+            </p>
+            <p class="room__meta">300 capacity · 22:00–04:00</p>
+          </article>
+          <article class="room room--parlour">
+            <div class="room__art" aria-hidden="true"></div>
+            <h3>The Parlour</h3>
+            <p>
+              Sixty seats around a small stage. Jazz on Sundays, songwriters midweek, and a bar that
+              keeps its voice down.
+            </p>
+            <p class="room__meta">60 capacity · 19:30–01:00</p>
+          </article>
+          <article class="room room--gallery">
+            <div class="room__art" aria-hidden="true"></div>
+            <h3>The Gallery</h3>
+            <p>
+              Members and their guests only. A long bar, deep chairs, and the quietest corner in the
+              building.
+            </p>
+            <p class="room__meta">120 capacity · Members only</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section membership" id="membership">
+        <div class="section__head">
+          <h2>Membership</h2>
+          <p>
+            Three tiers. All include priority entry and the members' bar. Applications are reviewed
+            monthly.
+          </p>
+        </div>
+        <div class="tiers">
+          <article class="tier">
+            <h3>Card</h3>
+            <p class="tier__price">£240<span>/year</span></p>
+            <ul>
+              <li>Priority entry, no queue</li>
+              <li>Access to The Gallery</li>
+              <li>Two guests per visit</li>
+            </ul>
+            <a class="button button--ghost" href="#reserve">Apply</a>
+          </article>
+          <article class="tier tier--featured">
+            <p class="tier__flag">Most taken</p>
+            <h3>Crown</h3>
+            <p class="tier__price">£480<span>/year</span></p>
+            <ul>
+              <li>Everything in Card</li>
+              <li>Table holds until midnight</li>
+              <li>Four guests per visit</li>
+              <li>Advance tickets before general release</li>
+            </ul>
+            <a class="button" href="#reserve">Apply</a>
+          </article>
+          <article class="tier">
+            <h3>Regent</h3>
+            <p class="tier__price">£900<span>/year</span></p>
+            <ul>
+              <li>Everything in Crown</li>
+              <li>Reserved booth, any night</li>
+              <li>Six guests per visit</li>
+              <li>Two private-hire hours a year</li>
+            </ul>
+            <a class="button button--ghost" href="#reserve">Apply</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reserve" id="reserve">
+        <div class="reserve__grid">
+          <div class="reserve__copy">
+            <h2>Reserve a table</h2>
+            <p>
+              Tell us the night and the size of the party. We hold tables until 30 minutes after
+              doors unless you tell us otherwise.
+            </p>
+            <p class="reserve__note">
+              For parties over twelve, or private hire, email
+              <a href="mailto:reservations@kingsclub.example">reservations@kingsclub.example</a>.
+            </p>
+          </div>
+
+          <form class="form" id="reservation-form" novalidate>
+            <div class="field">
+              <label for="name">Name the table is under</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="eventId">Night</label>
+              <select id="eventId" name="eventId" required>
+                <option value="">Choose a night…</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="guests">Guests</label>
+              <input id="guests" name="guests" type="number" min="1" max="12" value="2" required />
+            </div>
+            <div class="field field--wide">
+              <label for="notes">Anything we should know <span>(optional)</span></label>
+              <textarea id="notes" name="notes" rows="3" maxlength="500"></textarea>
+            </div>
+            <div class="form__foot">
+              <button class="button" type="submit">Request the table</button>
+              <p class="form__message" id="form-message" role="status"></p>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="section visit" id="visit">
+        <div class="section__head">
+          <h2>Visit</h2>
+        </div>
+        <div class="visit__grid">
+          <div>
+            <h3>Hours</h3>
+            <ul class="plain">
+              <li><span>Thursday</span><span>21:00 – 03:00</span></li>
+              <li><span>Friday</span><span>22:00 – 04:00</span></li>
+              <li><span>Saturday</span><span>22:00 – 04:00</span></li>
+              <li><span>Sunday</span><span>19:30 – 01:00</span></li>
+              <li><span>Mon – Wed</span><span>Private hire only</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Address</h3>
+            <p class="plain-text">
+              14 Kingsway Arches<br />
+              Southbank<br />
+              London SE1 0AA
+            </p>
+            <p class="plain-text muted">Nearest station: Waterloo, 6 minutes on foot.</p>
+          </div>
+          <div>
+            <h3>Door</h3>
+            <p class="plain-text">
+              Over 21s. Photo ID every night, no exceptions. Smart dress after 22:00. We keep a
+              cloakroom; it's free for members.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <p class="wordmark wordmark--footer">
+          <span class="wordmark__crown" aria-hidden="true">♛</span>
+          <span class="wordmark__text">Kings<span>Club</span></span>
+        </p>
+        <p class="muted">
+          14 Kingsway Arches, Southbank, London SE1 0AA ·
+          <a href="mailto:hello@kingsclub.example">hello@kingsclub.example</a>
+        </p>
+        <p class="muted small">Listings, prices and address are placeholders for this build.</p>
+      </div>
+    </footer>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

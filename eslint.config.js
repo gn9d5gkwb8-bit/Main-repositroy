@@ -9,4 +9,17 @@ export default tseslint.config(
   {
     ignores: ["dist/**", "node_modules/**"],
   },
+  {
+    // Browser code served from public/ — no bundler, plain ES modules.
+    files: ["public/**/*.js"],
+    languageOptions: {
+      globals: {
+        document: "readonly",
+        window: "readonly",
+        fetch: "readonly",
+        FormData: "readonly",
+        console: "readonly",
+      },
+    },
+  },
 );
